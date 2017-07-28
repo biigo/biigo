@@ -1,4 +1,4 @@
-package bgoutils
+package utils
 
 type collectionDiffItemEachHandler func(interface{}, string)
 type collectionDiffItemEacher func(func(interface{}, string))

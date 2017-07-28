@@ -1,4 +1,4 @@
-package bgosql
+package types
 
 import (
 	"database/sql/driver"
