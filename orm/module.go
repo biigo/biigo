@@ -21,7 +21,7 @@ func NewModule(dirver, url string) *Module {
 }
 
 // InitApp 初始化应用程序
-func (module *Module) InitApp(app biigo.App) error {
+func (module *Module) InitApp(app *biigo.App) error {
 	db, err := gorm.Open(module.dirver, module.url)
 	if err != nil {
 		return err
@@ -39,4 +39,9 @@ func (module *Module) InitApp(app biigo.App) error {
 	}
 	tx.Commit()
 	return nil
+}
+
+// Name return orm module name
+func (module *Module) Name() string {
+	return "orm"
 }
