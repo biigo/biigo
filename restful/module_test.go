@@ -12,6 +12,6 @@ import (
 func TestModule(t *testing.T) {
 	m := NewModule("/test/api", "/test/api/docs.json", &spec.Info{})
 
-	assert.Implements(t, (*biigo.Module)(nil), m)
+	assert.Implements(t, (*biigo.AppModule)(nil), m)
 	assert.Implements(t, (*biigo.AppInitor)(nil), m)
 }

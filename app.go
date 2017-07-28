@@ -5,22 +5,32 @@ type AppInitor interface {
 	InitApp(app *App) error
 }
 
-type Module interface {
+// AppModule 描述业务模块
+type AppModule interface {
 	Name() string
 }
 
 // App 描述应用程序
 type App struct {
-	modules map[string]Module
+	modules map[string]AppModule
+}
+
+// Module 返回指定名称的模块
+func (app *App) Module(name string) AppModule {
+	m, ok := app.modules[name]
+	if !ok {
+		panic("Module " + name + " Not Found")
+	}
+	return m
 }
 
 // Modules 返回已经注册的应用模块
-func (app *App) Modules() map[string]Module {
+func (app *App) Modules() map[string]AppModule {
 	return app.modules
 }
 
 // AddModule 添加业务模块
-func (app *App) AddModule(modules ...Module) *App {
+func (app *App) AddModule(modules ...AppModule) *App {
 	for _, module := range modules {
 		app.modules[module.Name()] = module
 	}
