@@ -1,4 +1,4 @@
-package restful
+package restapi
 
 import (
 	"github.com/biigo/biigo"
