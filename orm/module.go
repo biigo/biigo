@@ -31,7 +31,7 @@ func (module *Module) InitApp(app *biigo.App) error {
 	tx := db.Begin()
 	for _, module := range app.Modules() {
 		if dataMigrator, ok := module.(DataMigrator); ok {
-			if err := dataMigrator.AutoMigration(tx); err != nil {
+			if err := dataMigrator.AutoMigrate(tx); err != nil {
 				tx.Rollback()
 				return err
 			}

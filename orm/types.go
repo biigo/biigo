@@ -9,8 +9,8 @@ import (
 // DataMigrator 定义数据迁移器
 type DataMigrator interface {
 
-	// AutoMigration 运行自动迁移
-	AutoMigration(*gorm.DB) error
+	// AutoMigrate 运行自动迁移
+	AutoMigrate(*gorm.DB) error
 }
 
 //Model base model
