@@ -1,6 +1,8 @@
 package biigo
 
-var defApp = &App{}
+var defApp = &App{
+	modules: map[string]AppModule{},
+}
 
 // Module 返回指定名称的模块
 func Module(name string) AppModule {
