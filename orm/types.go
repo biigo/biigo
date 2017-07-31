@@ -14,7 +14,7 @@ type DataMigrator interface {
 }
 
 // DbWriter 定义需要依赖数据库的模块
-type DdWriter interface {
+type DbWriter interface {
 	SetDB(*gorm.DB)
 }
 

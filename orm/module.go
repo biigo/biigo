@@ -30,7 +30,7 @@ func (module *Module) InitApp(app *biigo.App) error {
 
 	tx := db.Begin()
 	for _, module := range app.Modules() {
-		if dbWriter, ok := module.(DdWriter); ok {
+		if dbWriter, ok := module.(DbWriter); ok {
 			dbWriter.SetDB(db)
 		}
 		if dataMigrator, ok := module.(DataMigrator); ok {
