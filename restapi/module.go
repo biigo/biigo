@@ -1,6 +1,9 @@
 package restapi
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/biigo/biigo"
 	"github.com/emicklei/go-restful"
 	"github.com/go-openapi/spec"
@@ -11,6 +14,7 @@ type Module struct {
 	APIPrefix  string
 	APIDocPath string
 	APIInfo    *spec.Info
+	HTTPListen string
 }
 
 // NewModule 创建新的 restful 模块实例
@@ -52,6 +56,14 @@ func (module *Module) InitApp(app *biigo.App) error {
 		Info:    module.APIInfo,
 	}.Register())
 	return nil
+}
+
+// RunWebServer 运行接口服务器
+func (module *Module) RunWebServer() {
+	if module.HTTPListen == "" {
+		module.HTTPListen = ":80"
+	}
+	log.Fatal(http.ListenAndServe(module.HTTPListen, nil))
 }
 
 // Name return module name
