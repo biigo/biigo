@@ -9,6 +9,9 @@ import (
 	"github.com/go-openapi/spec"
 )
 
+// ModuleName 存储当前模块名称
+const ModuleName = "restapi"
+
 // Module restful module
 type Module struct {
 	APIPrefix  string
@@ -74,5 +77,5 @@ func (module *Module) RunWebServer() {
 
 // Name return module name
 func (module *Module) Name() string {
-	return "restfull"
+	return ModuleName
 }
