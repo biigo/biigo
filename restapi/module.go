@@ -18,12 +18,18 @@ type Module struct {
 }
 
 // NewModule 创建新的 restful 模块实例
-func NewModule(prefix, docsPath string, info *spec.Info) *Module {
-	return &Module{
+func NewModule(prefix, docsPath string, info *spec.Info, httpListen ...string) *Module {
+	module := &Module{
 		APIPrefix:  prefix,
 		APIDocPath: docsPath,
 		APIInfo:    info,
 	}
+
+	if len(httpListen) > 0 {
+		module.HTTPListen = httpListen[0]
+	}
+
+	return module
 }
 
 // InitApp 初始化应用程序
