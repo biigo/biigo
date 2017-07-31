@@ -13,6 +13,11 @@ type DataMigrator interface {
 	AutoMigrate(*gorm.DB) error
 }
 
+// DbWriter 定义需要依赖数据库的模块
+type DdWriter interface {
+	SetDB(*gorm.DB)
+}
+
 //Model base model
 type Model struct {
 	ID        uint       `gorm:"primary_key" json:"id"`
