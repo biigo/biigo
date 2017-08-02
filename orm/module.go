@@ -26,6 +26,7 @@ func (module *Module) InitApp(app *biigo.App) error {
 	if err != nil {
 		return err
 	}
+	db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8")
 	module.DB = db
 
 	tx := db.Begin()
