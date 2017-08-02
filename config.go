@@ -11,8 +11,8 @@ import (
 )
 
 // ParseConfig 加载配置
-func ParseConfig(root string) (Config, error) {
-	config := Config{Values: make(map[string]interface{})}
+func ParseConfig(root string) (ConfigContainer, error) {
+	config := ConfigContainer{Values: make(map[string]interface{})}
 
 	files, err := utils.ExtFiles(root, ".json")
 	if err != nil {

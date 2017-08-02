@@ -6,7 +6,7 @@ var defApp = &App{
 
 // Config 返回系统配置
 func Config() ConfigContainer {
-	return defApp.config()
+	return defApp.Config()
 }
 
 // Module 返回指定名称的模块

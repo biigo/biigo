@@ -10,7 +10,7 @@ func TestConfigSuite(t *testing.T) {
 
 type configTestSuite struct {
 	suite.Suite
-	config Config
+	config ConfigContainer
 }
 
 func (suite *configTestSuite) SetupTest() {
