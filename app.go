@@ -1,5 +1,11 @@
 package biigo
 
+// AppConfiger 应用程序配置器
+// 模块需要加载配置时可以实现本模块
+type AppConfiger interface {
+	ConfigApp(app *App) error
+}
+
 // AppInitor 实用程序初始化器
 type AppInitor interface {
 	InitApp(app *App) error
@@ -55,6 +61,13 @@ func (app *App) AddModule(modules ...AppModule) *App {
 
 // Init 初始化应用程序
 func (app *App) Init() *App {
+	for _, module := range app.modules {
+		if appConfiger, ok := module.(AppConfiger); ok {
+			if err := appConfiger.ConfigApp(app); err != nil {
+				panic(err)
+			}
+		}
+	}
 	for _, module := range app.modules {
 		if appInitor, ok := module.(AppInitor); ok {
 			if err := appInitor.InitApp(app); err != nil {
