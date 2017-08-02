@@ -13,6 +13,22 @@ type AppModule interface {
 // App 描述应用程序
 type App struct {
 	modules map[string]AppModule
+	config  Config
+}
+
+// Config 返回应用程序配置
+func (app *App) Config() Config {
+	return app.config
+}
+
+// LoadConfig 从配置目录加载应用程序配置
+func (app *App) LoadConfig(root string) *App {
+	if config, err := ParseConfig(root); err != nil {
+		panic(err)
+	} else {
+		app.config = config
+	}
+	return app
 }
 
 // Module 返回指定名称的模块
