@@ -4,6 +4,11 @@ var defApp = &App{
 	modules: map[string]AppModule{},
 }
 
+// LoadConfig 加载应用程序配置
+func LoadConfig(root string) *App {
+	return defApp.LoadConfig(root)
+}
+
 // Config 返回系统配置
 func Config() ConfigContainer {
 	return defApp.Config()
