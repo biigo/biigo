@@ -4,6 +4,11 @@ var defApp = &App{
 	modules: map[string]AppModule{},
 }
 
+// Config 返回系统配置
+func Config() ConfigContainer {
+	return defApp.config()
+}
+
 // Module 返回指定名称的模块
 func Module(name string) AppModule {
 	return defApp.Module(name)

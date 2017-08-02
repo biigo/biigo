@@ -13,11 +13,11 @@ type AppModule interface {
 // App 描述应用程序
 type App struct {
 	modules map[string]AppModule
-	config  Config
+	config  ConfigContainer
 }
 
 // Config 返回应用程序配置
-func (app *App) Config() Config {
+func (app *App) Config() ConfigContainer {
 	return app.config
 }
 

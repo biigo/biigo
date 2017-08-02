@@ -55,13 +55,13 @@ func ParseConfig(root string) (Config, error) {
 	return config, nil
 }
 
-//Config service
-type Config struct {
+//ConfigContainer service
+type ConfigContainer struct {
 	Values map[string]interface{}
 }
 
 //Get config
-func (c Config) Get(key string, def interface{}) interface{} {
+func (c ConfigContainer) Get(key string, def interface{}) interface{} {
 	if v, ok := c.Values[key]; ok {
 		return v
 	}
@@ -69,12 +69,12 @@ func (c Config) Get(key string, def interface{}) interface{} {
 }
 
 // String 返回字符串配置
-func (c Config) String(key, def string) string {
+func (c ConfigContainer) String(key, def string) string {
 	return c.Get(key, def).(string)
 }
 
 // JSONUnmarshal 利用 json.Unmarshal 解析配置
-func (c Config) JSONUnmarshal(key string, v interface{}) error {
+func (c ConfigContainer) JSONUnmarshal(key string, v interface{}) error {
 	content := c.Get(key, nil)
 	if content == nil {
 		return fmt.Errorf("config key %s not found", key)
