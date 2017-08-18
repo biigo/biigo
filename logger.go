@@ -20,7 +20,7 @@ func Log() *Logger {
 }
 
 // SetDefFileLog 设置默认的日志文件存储引擎
-func (log *Logger) SetDefFileLog() {
+func (log *Logger) SetDefFileLog() *Logger {
 	log.SetLogger(
 		logs.AdapterMultiFile,
 		`{
@@ -30,4 +30,5 @@ func (log *Logger) SetDefFileLog() {
 			]
 		}`,
 	)
+	return log
 }
