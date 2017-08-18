@@ -11,6 +11,11 @@ type AppInitor interface {
 	InitApp(app *App) error
 }
 
+// AppRunner 定义需要在应用程序运行阶段执行的接口
+type AppRunner interface {
+	RunApp()
+}
+
 // AppModule 描述业务模块
 type AppModule interface {
 	Name() string
@@ -76,4 +81,13 @@ func (app *App) Init() *App {
 		}
 	}
 	return app
+}
+
+// Run 运行应用程序
+func (app *App) Run() {
+	for _, module := range app.modules {
+		if runner, ok := module.(AppRunner); ok {
+			go runner.RunApp()
+		}
+	}
 }
