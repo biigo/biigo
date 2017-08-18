@@ -1,6 +1,7 @@
 package biigo
 
 import (
+	"errors"
 	"testing"
 	"time"
 
@@ -11,8 +12,9 @@ type TestRunner struct {
 	isRun bool
 }
 
-func (runner *TestRunner) RunApp() {
+func (runner *TestRunner) RunApp(errCh chan error) {
 	runner.isRun = true
+	errCh <- errors.New("test err")
 }
 
 func (runner *TestRunner) Name() string {

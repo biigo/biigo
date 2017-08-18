@@ -13,7 +13,7 @@ type AppInitor interface {
 
 // AppRunner 定义需要在应用程序运行阶段执行的接口
 type AppRunner interface {
-	RunApp()
+	RunApp(chan error)
 }
 
 // AppModule 描述业务模块
@@ -85,9 +85,12 @@ func (app *App) Init() *App {
 
 // Run 运行应用程序
 func (app *App) Run() {
+	errCh := make(chan error)
 	for _, module := range app.modules {
 		if runner, ok := module.(AppRunner); ok {
-			go runner.RunApp()
+			go runner.RunApp(errCh)
 		}
 	}
+	err := <-errCh
+	Log().Error("应用异常退出：%s", err.Error())
 }

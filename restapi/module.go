@@ -1,7 +1,6 @@
 package restapi
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/biigo/biigo"
@@ -68,11 +67,14 @@ func (module *Module) InitApp(app *biigo.App) error {
 }
 
 // RunApp 运行接口服务器
-func (module *Module) RunApp() {
+func (module *Module) RunApp(errCh chan error) {
 	if module.HTTPListen == "" {
 		module.HTTPListen = ":80"
 	}
-	log.Fatal(http.ListenAndServe(module.HTTPListen, nil))
+	err := http.ListenAndServe(module.HTTPListen, nil)
+	if err != nil {
+		errCh <- err
+	}
 }
 
 // Name return module name
