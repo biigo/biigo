@@ -14,6 +14,7 @@ func Log() *logs.BeeLogger {
 	return logger
 }
 
+// SetDefFileLog 设置默认的日志文件存储引擎
 func SetDefFileLog() {
 	Log().SetLogger(
 		logs.AdapterMultiFile,
