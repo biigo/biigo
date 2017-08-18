@@ -14,4 +14,5 @@ func TestModule(t *testing.T) {
 
 	assert.Implements(t, (*biigo.AppModule)(nil), m)
 	assert.Implements(t, (*biigo.AppInitor)(nil), m)
+	assert.Implements(t, (*biigo.AppRunner)(nil), m)
 }

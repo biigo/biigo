@@ -67,8 +67,8 @@ func (module *Module) InitApp(app *biigo.App) error {
 	return nil
 }
 
-// RunWebServer 运行接口服务器
-func (module *Module) RunWebServer() {
+// RunApp 运行接口服务器
+func (module *Module) RunApp() {
 	if module.HTTPListen == "" {
 		module.HTTPListen = ":80"
 	}
