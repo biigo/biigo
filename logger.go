@@ -4,19 +4,24 @@ import (
 	"github.com/astaxie/beego/logs"
 )
 
-var logger *logs.BeeLogger
+var logger *Logger
+
+// Logger 扩展 BeeLogger
+type Logger struct {
+	*logs.BeeLogger
+}
 
 // Log 返回日志记录器
-func Log() *logs.BeeLogger {
+func Log() *Logger {
 	if logger == nil {
-		logger = logs.NewLogger()
+		logger = &Logger{logs.NewLogger()}
 	}
 	return logger
 }
 
 // SetDefFileLog 设置默认的日志文件存储引擎
-func SetDefFileLog() {
-	Log().SetLogger(
+func (log *Logger) SetDefFileLog() {
+	log.SetLogger(
 		logs.AdapterMultiFile,
 		`{
 			"filename":"logs/biigo.log",
