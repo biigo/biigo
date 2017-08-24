@@ -7,16 +7,14 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-var module = &Module{}
+var module = &Module{
+	dbs: map[string]*gorm.DB{},
+}
 
 // Module orm module
 type Module struct {
 	config Config
 	dbs    map[string]*gorm.DB
-
-	dirver string
-	url    string
-	DB     *gorm.DB
 }
 
 // Db 返回指定名称的数据库
