@@ -1,33 +1,58 @@
 package orm
 
 import (
+	"fmt"
+
 	"github.com/biigo/biigo"
 	"github.com/jinzhu/gorm"
 )
 
+var module = &Module{}
+
 // Module orm module
 type Module struct {
+	config Config
+	dbs    map[string]*gorm.DB
+
 	dirver string
 	url    string
 	DB     *gorm.DB
 }
 
-// NewModule 创建模块实例
-func NewModule(dirver, url string) *Module {
-	return &Module{
-		dirver: dirver,
-		url:    url,
+// Db 返回指定名称的数据库
+func (module *Module) Db(name string) (*gorm.DB, error) {
+	if db, ok := module.dbs[name]; ok {
+		return db, nil
 	}
+	config, ok := module.config.Dbs[name]
+	if !ok {
+		return nil, fmt.Errorf("db %s not found", name)
+	}
+	db, err := gorm.Open(config.Driver(), config.URL)
+	if err != nil {
+		return nil, err
+	}
+	module.dbs[name] = db
+	return db, nil
+}
+
+// Db 返回指定名称的数据库
+func Db(name string) (*gorm.DB, error) {
+	return module.Db(name)
+}
+
+// NewModule 创建模块实例
+func NewModule(config Config) *Module {
+	module.config = config
+	return module
 }
 
 // InitApp 初始化应用程序
 func (module *Module) InitApp(app *biigo.App) error {
-	db, err := gorm.Open(module.dirver, module.url)
+	db, err := module.Db("default")
 	if err != nil {
 		return err
 	}
-	db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8")
-	module.DB = db
 
 	tx := db.Begin()
 	for _, module := range app.Modules() {
