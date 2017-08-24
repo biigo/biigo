@@ -8,7 +8,7 @@ import (
 )
 
 func TestModule(t *testing.T) {
-	m := NewModule("mysql", "testUrl")
+	m := NewModule(Config{})
 
 	assert.Implements(t, (*biigo.AppModule)(nil), m)
 	assert.Implements(t, (*biigo.AppInitor)(nil), m)
