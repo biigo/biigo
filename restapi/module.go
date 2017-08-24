@@ -20,15 +20,26 @@ type Module struct {
 }
 
 // NewModule 创建新的 restful 模块实例
-func NewModule(prefix, docsPath string, info *spec.Info, httpListen ...string) *Module {
+func NewModule(config Config) *Module {
 	module := &Module{
-		APIPrefix:  prefix,
-		APIDocPath: docsPath,
-		APIInfo:    info,
+		APIPrefix:  config.APIPrefix(),
+		APIDocPath: config.Docs.Path,
+		APIInfo: &spec.Info{
+			InfoProps: spec.InfoProps{
+				Title:       config.Docs.Title,
+				Description: config.Docs.Desc,
+				Contact: &spec.ContactInfo{
+					Name:  config.Docs.ContactName,
+					Email: config.Docs.ContactEmail,
+				},
+				License: &spec.License{},
+				Version: config.Docs.Version,
+			},
+		},
 	}
 
-	if len(httpListen) > 0 {
-		module.HTTPListen = httpListen[0]
+	if config.HTTPListen != "" {
+		module.HTTPListen = config.HTTPListen
 	}
 
 	return module
