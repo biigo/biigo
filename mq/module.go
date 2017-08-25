@@ -2,6 +2,7 @@ package mq
 
 import (
 	"github.com/biigo/biigo"
+	"github.com/streadway/amqp"
 )
 
 // ModuleName 存储当前模块名称
@@ -17,6 +18,7 @@ func NewModule() *Module {
 	return &Module{
 		manager: &Manager{
 			Config: Config{},
+			conns:  map[string]*amqp.Connection{},
 		},
 	}
 }
