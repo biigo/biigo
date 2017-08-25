@@ -28,7 +28,7 @@ type Module struct {
 
 // ConfigApp 配置模块
 func (module *Module) ConfigApp(app *biigo.App) error {
-	return app.Config().JSONUnmarshal("mq", module.manager.Config)
+	return app.Config().JSONUnmarshal("mq", &module.manager.Config)
 }
 
 // InitApp 初始化应用程序
