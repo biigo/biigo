@@ -1,5 +1,7 @@
 package restapi
 
+import "github.com/go-openapi/spec"
+
 // Config 定义restapi模块配置
 type Config struct {
 	Prefix     string    `json:"apiPrefix"`
@@ -23,4 +25,28 @@ func (c Config) APIPrefix() string {
 		return "/api"
 	}
 	return c.Prefix
+}
+
+// DocsPath 返回接口文档地址
+func (c DocConfig) DocsPath() string {
+	if c.Path == "" {
+		c.Path = "/api/docs.json"
+	}
+	return c.Path
+}
+
+// Info 返回接口文档信息
+func (c DocConfig) Info() *spec.Info {
+	return &spec.Info{
+		InfoProps: spec.InfoProps{
+			Title:       c.Title,
+			Description: c.Desc,
+			Contact: &spec.ContactInfo{
+				Name:  c.ContactName,
+				Email: c.ContactEmail,
+			},
+			License: &spec.License{},
+			Version: c.Version,
+		},
+	}
 }

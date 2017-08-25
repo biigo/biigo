@@ -11,44 +11,29 @@ import (
 // ModuleName 存储当前模块名称
 const ModuleName = "restapi"
 
-// Module restful module
-type Module struct {
-	APIPrefix  string
-	APIDocPath string
-	APIInfo    *spec.Info
-	HTTPListen string
+// NewModule 创建新的 restful 模块实例
+func NewModule() *Module {
+	return &Module{
+		config:    Config{},
+		ConfigKey: "restapi",
+	}
 }
 
-// NewModule 创建新的 restful 模块实例
-func NewModule(config Config) *Module {
-	module := &Module{
-		APIPrefix:  config.APIPrefix(),
-		APIDocPath: config.Docs.Path,
-		APIInfo: &spec.Info{
-			InfoProps: spec.InfoProps{
-				Title:       config.Docs.Title,
-				Description: config.Docs.Desc,
-				Contact: &spec.ContactInfo{
-					Name:  config.Docs.ContactName,
-					Email: config.Docs.ContactEmail,
-				},
-				License: &spec.License{},
-				Version: config.Docs.Version,
-			},
-		},
-	}
+// Module restful module
+type Module struct {
+	config    Config
+	ConfigKey string
+}
 
-	if config.HTTPListen != "" {
-		module.HTTPListen = config.HTTPListen
-	}
-
-	return module
+// ConfigApp 配置模块
+func (module *Module) ConfigApp(app *biigo.App) error {
+	return app.Config().JSONUnmarshal(module.ConfigKey, &module.config)
 }
 
 // InitApp 初始化应用程序
 func (module *Module) InitApp(app *biigo.App) error {
 	ws := new(restful.WebService)
-	ws.Path(module.APIPrefix).
+	ws.Path(module.config.APIPrefix()).
 		Consumes(restful.MIME_JSON).
 		Produces(restful.MIME_JSON)
 
@@ -64,25 +49,22 @@ func (module *Module) InitApp(app *biigo.App) error {
 		}
 	}
 
-	if module.APIDocPath == "" {
-		module.APIDocPath = "/api/docs.json"
-	}
-
 	restful.Add(ws)
 	restful.Add(DocsResource{
-		APIPath: module.APIDocPath,
+		APIPath: module.config.Docs.DocsPath(),
 		Tags:    tags,
-		Info:    module.APIInfo,
+		Info:    module.config.Docs.Info(),
 	}.Register())
 	return nil
 }
 
 // RunApp 运行接口服务器
 func (module *Module) RunApp(errCh chan error) {
-	if module.HTTPListen == "" {
-		module.HTTPListen = ":80"
+	listen := ":80"
+	if module.config.HTTPListen != "" {
+		listen = module.config.HTTPListen
 	}
-	err := http.ListenAndServe(module.HTTPListen, nil)
+	err := http.ListenAndServe(listen, nil)
 	if err != nil {
 		errCh <- err
 	}
