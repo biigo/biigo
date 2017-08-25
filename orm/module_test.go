@@ -8,8 +8,9 @@ import (
 )
 
 func TestModule(t *testing.T) {
-	m := NewModule(Config{})
+	m := NewModule()
 
 	assert.Implements(t, (*biigo.AppModule)(nil), m)
 	assert.Implements(t, (*biigo.AppInitor)(nil), m)
+	assert.Implements(t, (*biigo.AppConfiger)(nil), m)
 }

@@ -7,14 +7,26 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-var module = &Module{
-	dbs: map[string]*gorm.DB{},
+// NewModule 创建模块实例
+func NewModule() *Module {
+	module := &Module{
+		config:        Config{},
+		ConfigKeyName: "orm",
+		dbs:           map[string]*gorm.DB{},
+	}
+	return module
 }
 
 // Module orm module
 type Module struct {
-	config Config
-	dbs    map[string]*gorm.DB
+	config        Config
+	ConfigKeyName string
+	dbs           map[string]*gorm.DB
+}
+
+// ConfigApp 配置模块
+func (module *Module) ConfigApp(app *biigo.App) error {
+	return app.Config().JSONUnmarshal(module.ConfigKeyName, &module.config)
 }
 
 // Db 返回指定名称的数据库
@@ -32,17 +44,6 @@ func (module *Module) Db(name string) (*gorm.DB, error) {
 	}
 	module.dbs[name] = db
 	return db, nil
-}
-
-// Db 返回指定名称的数据库
-func Db(name string) (*gorm.DB, error) {
-	return module.Db(name)
-}
-
-// NewModule 创建模块实例
-func NewModule(config Config) *Module {
-	module.config = config
-	return module
 }
 
 // InitApp 初始化应用程序
