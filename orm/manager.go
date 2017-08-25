@@ -14,6 +14,9 @@ type Manager struct {
 
 // Db 返回指定名称的数据库
 func (manager *Manager) Db(name string) (*gorm.DB, error) {
+	if manager.dbs == nil {
+		manager.dbs = map[string]*gorm.DB{}
+	}
 	if db, ok := manager.dbs[name]; ok {
 		return db, nil
 	}
