@@ -2,20 +2,11 @@ package orm
 
 import (
 	"time"
-
-	"github.com/jinzhu/gorm"
 )
 
-// DataMigrator 定义数据迁移器
-type DataMigrator interface {
-
-	// AutoMigrate 运行自动迁移
-	AutoMigrate(*gorm.DB) error
-}
-
-// DbWriter 定义需要依赖数据库的模块
-type DbWriter interface {
-	SetDB(*gorm.DB)
+// ManagerSetter 定义需要依赖数据库的模块
+type ManagerSetter interface {
+	SetOrmManager(*Manager)
 }
 
 //Model base model
