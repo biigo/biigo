@@ -2,7 +2,6 @@ package restapi
 
 import (
 	restful "github.com/emicklei/go-restful"
-	"github.com/go-openapi/spec"
 )
 
 // Resource 描述 restful 资源
@@ -17,5 +16,5 @@ type ResourceContainer interface {
 
 // ResourceTagContainer 描述资源标签容器
 type ResourceTagContainer interface {
-	ResourceTags() []spec.Tag
+	ResourceTags() []Tag
 }
