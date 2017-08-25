@@ -34,7 +34,9 @@ func (module *Module) ConfigApp(app *biigo.App) error {
 func (module *Module) InitApp(app *biigo.App) error {
 	for _, m := range app.Modules() {
 		if managerSetter, ok := m.(ManagerSetter); ok {
-			managerSetter.SetOrmManager(module.Manager)
+			if err := managerSetter.SetOrmManager(module.Manager); err != nil {
+				return err
+			}
 		}
 	}
 	return nil

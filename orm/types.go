@@ -6,7 +6,7 @@ import (
 
 // ManagerSetter 定义需要依赖数据库的模块
 type ManagerSetter interface {
-	SetOrmManager(*Manager)
+	SetOrmManager(*Manager) error
 }
 
 //Model base model

@@ -10,7 +10,7 @@ const ModuleName = "mq"
 
 // ManagerSetter 定义需要依赖 MQ 的模块
 type ManagerSetter interface {
-	SetMqManager(*Manager)
+	SetMqManager(*Manager) error
 }
 
 // NewModule 创建一个 MQ 模块对象
@@ -37,7 +37,9 @@ func (module *Module) ConfigApp(app *biigo.App) error {
 func (module *Module) InitApp(app *biigo.App) error {
 	for _, m := range app.Modules() {
 		if mqSetter, ok := m.(ManagerSetter); ok {
-			mqSetter.SetMqManager(module.manager)
+			if err := mqSetter.SetMqManager(module.manager); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
