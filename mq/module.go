@@ -1,74 +1,47 @@
 package mq
 
 import (
-	"errors"
-
 	"github.com/biigo/biigo"
-	"github.com/streadway/amqp"
 )
 
 // ModuleName 存储当前模块名称
 const ModuleName = "mq"
 
-var context = &Context{
-	configs: []config{},
+// ManagerSetter 定义需要依赖 MQ 的模块
+type ManagerSetter interface {
+	SetMqManager(*Manager)
 }
 
-// MqConnectionSetter 定义需要依赖 MQ 连接的模块
-type MqConnectionSetter interface {
-	SetMQConnect(*amqp.Connection)
+// NewModule 创建一个 MQ 模块对象
+func NewModule() *Module {
+	return &Module{
+		manager: &Manager{
+			Config: Config{},
+		},
+	}
 }
 
-// Context mq 模块上下文
-type Context struct {
-	configs []config
-	defConn *amqp.Connection
-}
-
-// Module return context
-func Module() *Context {
-	return context
+// Module mq 模块上下文
+type Module struct {
+	manager *Manager
 }
 
 // ConfigApp 配置模块
-func (context *Context) ConfigApp(app *biigo.App) error {
-	return app.Config().JSONUnmarshal("mq", &context.configs)
+func (module *Module) ConfigApp(app *biigo.App) error {
+	return app.Config().JSONUnmarshal("mq", module.manager.Config)
 }
 
 // InitApp 初始化应用程序
-func (context *Context) InitApp(app *biigo.App) error {
-	conn, err := context.DefConn()
-	if err != nil {
-		return err
-	}
-	for _, module := range app.Modules() {
-		if connSetter, ok := module.(MqConnectionSetter); ok {
-			connSetter.SetMQConnect(conn)
+func (module *Module) InitApp(app *biigo.App) error {
+	for _, m := range app.Modules() {
+		if mqSetter, ok := m.(ManagerSetter); ok {
+			mqSetter.SetMqManager(module.manager)
 		}
 	}
 	return nil
 }
 
 // Name return mq module name
-func (context *Context) Name() string {
+func (module Module) Name() string {
 	return ModuleName
-}
-
-// DefConn 返回默认消息中间件连接
-func (context *Context) DefConn() (*amqp.Connection, error) {
-	if context.defConn == nil && len(context.configs) < 1 {
-		return context.defConn, errors.New("缺少消息中间件连接配置")
-	}
-	if context.defConn == nil {
-		if conn, err := amqp.Dial(context.configs[0].URI); err == nil {
-			context.defConn = conn
-		} else {
-			return context.defConn, err
-		}
-	}
-	return context.defConn, nil
-}
-
-type config struct {
-	URI string `json:"uri"`
 }
