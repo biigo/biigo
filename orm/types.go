@@ -9,6 +9,13 @@ type ManagerSetter interface {
 	SetOrmManager(*Manager) error
 }
 
+// DataMigrator 定义数据迁移器
+type DataMigrator interface {
+
+	// AutoMigrate 运行自动迁移
+	AutoMigrate() error
+}
+
 //Model base model
 type Model struct {
 	ID        uint       `gorm:"primary_key" json:"id"`

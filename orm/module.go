@@ -38,6 +38,11 @@ func (module *Module) InitApp(app *biigo.App) error {
 				return err
 			}
 		}
+		if migrator, ok := m.(DataMigrator); ok {
+			if err := migrator.AutoMigrate(); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }
